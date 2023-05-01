@@ -1,0 +1,8 @@
+{
+  "googleClientId": "612182709238-er0hn8k1uhqhh1o58m50it8dqie8c8fe.apps.googleusercontent.com",
+  "apiUrl": "/v1",
+  "withApiServer": true,
+  "apiServerUrlProduction": "https://somesite.live",
+  "apiServerUrlDevelopment": "http://localhost:3080",
+  "env": "dev"
+}
