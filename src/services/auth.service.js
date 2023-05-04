@@ -41,9 +41,11 @@ export function logout() {
     .finally(() => {
       stopRefreshTokenTimer();
       userSubject.next(null);
-      window.location.replace('/');
+      redirect('/login')
+      // window.location.replace('/login');
     })
-    .catch(() => window.location.replace('/'));
+    // .catch(() => window.location.replace('/login'));
+    .catch(() => redirect('/login'));
 }
 
 
