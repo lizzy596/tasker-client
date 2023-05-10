@@ -8,7 +8,7 @@ import { loginValidation } from '../../validations/auth.validation';
 import { authService } from '../../services/auth.service';
 import AppleLoginButton from './AppleLoginButton';
 import GoogleLoginButton from './GoogleLoginButton';
-import { GoogleLogin, googleLogout, useGoogleLogin } from '@react-oauth/google';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -26,8 +26,12 @@ const LoginForm = () => {
   const { setUser } = authService.useRedirectLoggedIn(navigate);
 
   const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => setUserInfo(tokenResponse),
+    onSuccess: async ({ code }) => {
+      console.log(code)
+      const tokens = await authService.loginWithGoogleToken({ code });
+    },
     onError: (error) => console.log(`Login Failed: ${error}`),
+    flow: 'auth-code',
   });
 
   // const login = useGoogleLogin({
@@ -127,7 +131,7 @@ const LoginForm = () => {
       </form>
       <div>
         <AppleLoginButton />
-        <GoogleLoginButton onPress={handleGoogleLogin} />
+        <GoogleLoginButton onPress={login} />
         {/* <GoogleLogin
             onSuccess={credentialResponse => {
               console.log(credentialResponse);
