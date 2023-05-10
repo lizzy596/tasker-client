@@ -12,7 +12,9 @@ export const authService = {
   login,
   logout,
   useUserAuth,
+  loginWithApple,
   refreshToken,
+  loginWithGoogleToken,
   useRedirectLoggedIn,
   user: userSubject.asObservable(),
   get userValue() {
@@ -59,6 +61,37 @@ export function useRedirectLoggedIn(navigate) {
   }, [user]);
 
   return { user, setUser };
+}
+
+export function loginWithGoogleToken(accessToken) {
+  return http
+    // .post('/auth/login/google', { token: googleData.idToken })
+    .post('/auth/login/google', { token: accessToken })
+    .then(response => {
+      const { user, tokens } = response.data;
+      const { token, expires } = tokens.access;
+      //setRefreshToken(tokens.refresh.token);
+      userSubject.next({ ...user, token });
+      startRefreshTokenTimer(expires);
+      return user;
+    });
+}
+
+export function loginWithApple(appleToken, fullName) {
+  return http
+    .post('/auth/login/apple', {
+      token: appleToken,
+      firstName: fullName?.givenName,
+      lastName: fullName?.familyName
+    })
+    .then(response => {
+      const { user, tokens } = response.data;
+      const { token, expires } = tokens.access;
+      //setRefreshToken(tokens.refresh.token);
+      userSubject.next({ ...user, token });
+      startRefreshTokenTimer(expires);
+      return user;
+    });
 }
 
 
