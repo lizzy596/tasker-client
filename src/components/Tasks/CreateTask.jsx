@@ -7,7 +7,7 @@ import TaskMessage from './TaskMessage';
 
 const CreateTask = () => {
   const userValue = useUserAuth();
-  const [showTaskMessage, setShowTaskMessage] = useState(false)
+  const [showTaskMessage, setShowTaskMessage] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
   const [formData, setFormData] = useState({
     title: '',
@@ -23,8 +23,6 @@ const CreateTask = () => {
       [name]: value,
     });
   };
-
-
 
   const handleDateChange = (date) => {
     setDueDate(date);
@@ -45,25 +43,25 @@ const CreateTask = () => {
 
     setDueDate(new Date());
     setShowTaskMessage(true);
-    
   };
-
 
   useEffect(() => {
     let timeout;
     timeout = setTimeout(() => {
-      setShowTaskMessage(false)
-
-    }, 2000)
+      setShowTaskMessage(false);
+    }, 2000);
     return () => {
       clearTimeout(timeout);
-    }
-  }, [showTaskMessage])
+    };
+  }, [showTaskMessage]);
 
   return (
     <>
       {showTaskMessage && <TaskMessage />}
       <form onSubmit={handleSubmit} className='max-w-md mx-auto'>
+        <h2 className='text-lg text-center font-medium text-gray-900'>
+          Create Task
+        </h2>
         <div className='mb-4'>
           <label htmlFor='title' className='block text-gray-700 font-bold mb-2'>
             Title
