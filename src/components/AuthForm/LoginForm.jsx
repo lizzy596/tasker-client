@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FormError from './FormError';
 import { validateForm } from '../../utils/validate';
@@ -8,41 +7,27 @@ import { loginValidation } from '../../validations/auth.validation';
 import { authService } from '../../services/auth.service';
 import AppleLoginButton from './AppleLoginButton';
 import GoogleLoginButton from './GoogleLoginButton';
-import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState([]);
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
-  const logOut = () => {
-    googleLogout();
-  };
+const { setUser } = authService.useRedirectLoggedIn(navigate);
 
-  const { setUser } = authService.useRedirectLoggedIn(navigate);
-
-  const login = useGoogleLogin({
+  const loginGoogle = useGoogleLogin({
     onSuccess: async ({ code }) => {
-      console.log(code)
-      const tokens = await authService.loginWithGoogleToken({ code });
+      await authService.loginWithGoogleToken({ code });
     },
     onError: (error) => console.log(`Login Failed: ${error}`),
     flow: 'auth-code',
   });
 
-  // const login = useGoogleLogin({
-  //   onSuccess: (response) => {
-  //     setUserInfo(response)
-
-  //   },
-  //   onError: (error) => console.log(`Login Failed: ${error}`),
-  // });
-
-  const handleInputChange = (event) => {
+    const handleInputChange = (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -61,26 +46,8 @@ const LoginForm = () => {
     } else {
       const loggedIn = await authService.login(formData);
       setUser(loggedIn);
-
-      // handleRegisterUser(formData);
-      // navigate('/login')
     }
   };
-
-  const handleGoogleLogin = async (accessToken) => {
-    login();
-    console.log(userInfo);
-
-    // const user = await authService.loginWithGoogleToken(accessToken);
-    console.log('pappy');
-    // console.log(userInfo);
-  };
-
-  // useEffect(() => {
-  //   if (userInfo.length > 0) {
-  //     handleGoogleLogin();
-  //   }
-  // }, [userInfo]);
 
   return (
     <>
@@ -131,17 +98,7 @@ const LoginForm = () => {
       </form>
       <div>
         <AppleLoginButton />
-        <GoogleLoginButton onPress={login} />
-        {/* <GoogleLogin
-            onSuccess={credentialResponse => {
-              console.log(credentialResponse);
-            }}
-          
-            onError={() => {
-              console.log('Login Failed');
-            }}
-          
-          /> */}
+        <GoogleLoginButton onPress={loginGoogle} />
       </div>
     </>
   );
