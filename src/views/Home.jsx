@@ -13,18 +13,21 @@ const Home = () => {
   const [tasks, setTasks] = useState([]);
 
   const { isLoading } = useQuery('getAllTasks', async () => {
-    const { data } = await taskService.getAllTasks(userValue);
+    const { data } = await taskService.getAllTasks();
     setTasks(data);
   });
 
-  const deleteTaskMutation = useMutation(id => taskService.deleteTask(id), {
+  const createTaskMutation = useMutation( {
     onSuccess: () => queryClient.invalidateQueries('getAllTasks'),
   });
 
+  const deleteTaskMutation = useMutation((id) => taskService.deleteTask(id), {
+    onSuccess: () => queryClient.invalidateQueries('getAllTasks'),
+  });
 
   const markCompleteMutation = useMutation(
     ({ id, task }) =>
-      taskService.updateTask(id, {...task,  isCompleted: !task.isCompleted }),
+      taskService.updateTask(id, { ...task, isCompleted: !task.isCompleted }),
     {
       onSuccess: () => queryClient.invalidateQueries('getAllTasks'),
     }
@@ -42,7 +45,7 @@ const Home = () => {
     <>
       <NavBar />
       <div className='absolute left-1 top-30'>
-        <TaskModal />
+        <TaskModal onCreate={createTaskMutation} />
       </div>
       <div className='flex justify-center items-center'>
         <div className='flex flex-col items-center justify-center'>
@@ -52,10 +55,16 @@ const Home = () => {
               userValue?.firstName.slice(1)
             }!`}
           </h4>
-          {!isLoading && (
+          {!isLoading && tasks.length > 0 ? (
             <div>
-              <Tasks tasks={tasks} onDelete={handleDelete} onComplete={handleComplete} />
+              <Tasks
+                tasks={tasks}
+                onDelete={handleDelete}
+                onComplete={handleComplete}
+              />
             </div>
+          ) : (
+            <h2>To Get Started, create a task!!</h2>
           )}
         </div>
       </div>
@@ -64,4 +73,3 @@ const Home = () => {
 };
 
 export default Home;
-

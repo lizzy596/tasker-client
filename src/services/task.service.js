@@ -18,10 +18,14 @@ export function createTask(params) {
   return http.post('/task', params);
 }
 
-export function getAllTasks(params) {
+export function getAllTasks() {
+
   const accessToken = authService.userValue.token;
+  const id = authService.userValue.id;
+  console.log('rip')
+  console.log(id)
   const http = createAuthCaller(accessToken);
-  return http.get('/task', params);
+  return http.get(`/task/user/${id}`);
 }
 
 

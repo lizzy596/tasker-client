@@ -1,16 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CreateTask from './CreateTask';
 
 const TaskModal = () => {
-  // const [showModal, setShowModal] = useState(false);
-
-  // function handleSubmit(e) {
-  //   e.preventDefault();
-  //   console.log('New task:', taskName);
-  //   setTaskName('');
-  //   setShowModal(false);
-  // }
-
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -33,11 +24,6 @@ const TaskModal = () => {
       {isOpen && (
         <div className='fixed z-10 inset-0 overflow-y-auto'>
           <div className='flex items-center justify-center min-h-screen'>
-            {/* <div
-              className='fixed inset-0 bg-black opacity-30'
-              onClick={closeModal}
-            /> */}
-
             <div className='bg-gray-100 rounded-lg border border-gray-700 w-96'>
               <div className='flex justify-end pr-4 pt-4'>
                 <button onClick={closeModal}>X</button>
@@ -48,7 +34,7 @@ const TaskModal = () => {
                   Create Task
                 </h2>
                 <div className='px-4 py-3'>
-                  <CreateTask />
+                  <CreateTask/>
                 </div>
               </div>
             </div>
@@ -58,13 +44,5 @@ const TaskModal = () => {
     </>
   );
 };
-
-// export default TaskModal;
-
-// import React from 'react';
-
-// const TaskModal = () => {
-//   return <div>TaskModal</div>;
-// };
 
 export default TaskModal;

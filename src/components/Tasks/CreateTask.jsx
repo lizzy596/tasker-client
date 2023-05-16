@@ -45,6 +45,7 @@ const CreateTask = () => {
 
     setDueDate(new Date());
     setShowTaskMessage(true);
+    
   };
 
 
