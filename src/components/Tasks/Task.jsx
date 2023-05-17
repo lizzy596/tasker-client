@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/en';
 
-const Task = ({ task, onComplete, onDelete}) => {
-  console.log(task.isCompleted)
+const Task = ({ task, onComplete, onDelete, onEdit }) => {
+  // console.log(task);
   const formattedDate = dayjs(task.dueDate).format('D MMMM, YYYY');
 
   return (
@@ -15,21 +15,16 @@ const Task = ({ task, onComplete, onDelete}) => {
             onChange={() => onComplete(task.id, task)}
             className='h-5 w-5 border border-blue-500 rounded-md checked:bg-blue-500 checked:border-transparent mr-8'
           />
-        
-  {/* <div className={task.isCompleted ? "line-through" : ''}> */}
-  <div
-      className={task.isCompleted ? 'line-through' : ''}
-      
-   
-    >
-    <h1 className="text-black-800 font-bold font-lg">{task.title}</h1>
-    <div className="text-gray-500">{formattedDate}</div>
-  </div>
 
+          {/* <div className={task.isCompleted ? "line-through" : ''}> */}
+          <div className={task.isCompleted ? 'line-through' : ''}>
+            <h1 className='text-black-800 font-bold font-lg'>{task.title}</h1>
+            <div className='text-gray-500'>{formattedDate}</div>
+          </div>
         </div>
         <div>
           <button
-            onClick={() => onEdit(task.id)}
+            onClick={() => onEdit(task)}
             className='bg-green-500 hover:bg-green-600 text-white py-1 px-4 mx-4 rounded-full'
           >
             Edit
@@ -47,7 +42,3 @@ const Task = ({ task, onComplete, onDelete}) => {
 };
 
 export default Task;
-
-
-
-

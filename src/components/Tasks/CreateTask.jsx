@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { taskService } from '../../services/task.service';
 import { useUserAuth } from '../../services/auth.service';
 import TaskMessage from './TaskMessage';
 
-const CreateTask = () => {
+const CreateTask = ({
+  openModal,
+  onCreate,
+  isEditing,
+  onEdit,
+  setEditTask,
+}) => {
   const userValue = useUserAuth();
   const [showTaskMessage, setShowTaskMessage] = useState(false);
   const [dueDate, setDueDate] = useState(new Date());
+
   const [formData, setFormData] = useState({
     title: '',
   });
@@ -30,20 +36,34 @@ const CreateTask = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    await taskService.createTask({
-      ...formData,
-      dueDate,
-      userId: userValue.id,
-    });
-
-    setFormData({
-      title: '',
-    });
-
-    setDueDate(new Date());
-    setShowTaskMessage(true);
+    if (isEditing) {
+      await onEdit(setEditTask.id, {
+        ...formData,
+        dueDate,
+        userId: userValue.id,
+      });
+      setFormData({
+        title: '',
+      });
+      setDueDate(new Date());
+      setShowTaskMessage(true);
+    } else {
+      await onCreate({ ...formData, dueDate, userId: userValue.id });
+      setFormData({
+        title: '',
+      });
+      setDueDate(new Date());
+      setShowTaskMessage(true);
+    }
   };
+
+  useEffect(() => {
+    if (isEditing) {
+      console.log(setEditTask);
+      setFormData({ title: setEditTask.title });
+      setDueDate(new Date(setEditTask.dueDate));
+    }
+  }, []);
 
   useEffect(() => {
     let timeout;
@@ -59,9 +79,13 @@ const CreateTask = () => {
     <>
       {showTaskMessage && <TaskMessage />}
       <form onSubmit={handleSubmit} className='max-w-md mx-auto'>
+        <div className='flex justify-end pr-4 pt-4'>
+          <button onClick={() => openModal()}>X</button>
+        </div>
         <h2 className='text-lg text-center font-medium text-gray-900'>
-          Create Task
+          {isEditing ? 'Edit Task' : 'Create Task'}
         </h2>
+
         <div className='mb-4'>
           <label htmlFor='title' className='block text-gray-700 font-bold mb-2'>
             Title
@@ -94,7 +118,7 @@ const CreateTask = () => {
           type='submit'
           className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
         >
-          Create Task
+          {isEditing ? 'Edit Task' : 'Create Task'}
         </button>
       </form>
     </>
