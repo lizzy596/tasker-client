@@ -1,5 +1,7 @@
 import { createAuthCaller } from './http.service'
 import { authService } from './auth.service'
+import queryString from "query-string";
+import { http } from './http.service';
 
 export const taskService = {
   createTask,
@@ -8,6 +10,12 @@ export const taskService = {
   updateTask
 
 }
+
+
+export function queryTasks(params) {
+  const query = queryString.stringify(params);
+  return http.get(`/task?${query}`)
+};
 
 export function createTask(params) {
   console.log(params);

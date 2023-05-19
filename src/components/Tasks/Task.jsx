@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/en';
 
-const Task = ({ task, onComplete, onDelete, onEdit }) => {
+const Task = ({ task, onComplete, onDelete, onEdit, isComplete }) => {
   // console.log(task);
   const formattedDate = dayjs(task.dueDate).format('D MMMM, YYYY');
 
@@ -16,7 +16,6 @@ const Task = ({ task, onComplete, onDelete, onEdit }) => {
             className='h-5 w-5 border border-blue-500 rounded-md checked:bg-blue-500 checked:border-transparent mr-8'
           />
 
-          {/* <div className={task.isCompleted ? "line-through" : ''}> */}
           <div className={task.isCompleted ? 'line-through' : ''}>
             <h1 className='text-black-800 font-bold font-lg'>{task.title}</h1>
             <div className='text-gray-500'>{formattedDate}</div>

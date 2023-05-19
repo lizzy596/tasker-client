@@ -17,7 +17,7 @@ const LoginForm = () => {
     password: '',
   });
 
-const { setUser } = authService.useRedirectLoggedIn(navigate);
+  const { setUser } = authService.useRedirectLoggedIn(navigate);
 
   const loginGoogle = useGoogleLogin({
     onSuccess: async ({ code }) => {
@@ -27,7 +27,7 @@ const { setUser } = authService.useRedirectLoggedIn(navigate);
     flow: 'auth-code',
   });
 
-    const handleInputChange = (event) => {
+  const handleInputChange = (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -50,7 +50,14 @@ const { setUser } = authService.useRedirectLoggedIn(navigate);
   };
 
   return (
-    <>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+
+        alignItems: 'center',
+      }}
+    >
       <form onSubmit={handleSubmit} className='max-w-md mx-auto'>
         <h1 className='text-4xl font-bold text-center text-black my-4'>
           Login
@@ -89,6 +96,7 @@ const { setUser } = authService.useRedirectLoggedIn(navigate);
         </div>
         <div className='flex items-center justify-between'>
           <button
+            style={{ width: '700%' }}
             className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
             type='submit'
           >
@@ -96,11 +104,19 @@ const { setUser } = authService.useRedirectLoggedIn(navigate);
           </button>
         </div>
       </form>
-      <div>
+      <div
+        style={{
+          width: '20%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <AppleLoginButton />
         <GoogleLoginButton onPress={loginGoogle} />
       </div>
-    </>
+    </div>
   );
 };
 

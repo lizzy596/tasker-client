@@ -15,6 +15,7 @@ const Home = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState({});
   const [isOpen, setIsOpen] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
   const { isLoading } = useQuery('getAllTasks', async () => {
     const { data } = await taskService.getAllTasks();
@@ -75,6 +76,7 @@ const Home = () => {
   };
 
   const handleComplete = async (id, task) => {
+    setIsComplete(true);
     await markCompleteMutation.mutateAsync({ id, task });
   };
 
@@ -112,6 +114,7 @@ const Home = () => {
                 onEdit={editTask}
                 onDelete={handleDelete}
                 onComplete={handleComplete}
+                isComplete={isComplete}
               />
             </div>
           ) : (

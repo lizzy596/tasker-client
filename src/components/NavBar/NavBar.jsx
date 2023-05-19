@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/auth.service';
+import { SearchBar } from '../SearchBar';
 
 const NavBar = () => {
   const userValue = authService.userValue;
@@ -18,6 +19,9 @@ const NavBar = () => {
       <div className='max-w-7xl mx-auto px-4  sm:px-6 lg:px-8 flex justify-between items-center h-16'>
         <div className='flex-shrink-0'>
           <span className='text-purple-800 font-bold text-lg'>TASKER</span>
+        </div>
+        <div>
+          <SearchBar />
         </div>
         <div className='flex flex-col items-center'>
           <button
