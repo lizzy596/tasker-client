@@ -59,7 +59,6 @@ const CreateTask = ({
 
   useEffect(() => {
     if (isEditing) {
-      console.log(setEditTask);
       setFormData({ title: setEditTask.title });
       setDueDate(new Date(setEditTask.dueDate));
     }
@@ -77,7 +76,7 @@ const CreateTask = ({
 
   return (
     <>
-      {showTaskMessage && <TaskMessage />}
+      {showTaskMessage && <TaskMessage isEditing={isEditing} />}
       <form onSubmit={handleSubmit} className='max-w-md mx-auto'>
         <div className='flex justify-end pr-4 pt-4'>
           <button onClick={() => openModal()}>X</button>

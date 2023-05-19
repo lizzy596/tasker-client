@@ -29,9 +29,10 @@ export function deleteTask(id) {
   return http.delete(`/task/${id}`);
 }
 
-export function updateTask(taskId, updatedTask) {
-  console.log(updatedTask)
+export function updateTask(taskId, updated) {
+  console.log(taskId)
+  console.log(updated)
   const accessToken = authService.userValue.token;
   const http = createAuthCaller(accessToken);
-  return http.patch(`/task/${taskId}`, updatedTask);
+  return http.patch(`/task/${taskId}`, updated);
 }

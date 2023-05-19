@@ -43,13 +43,8 @@ const Home = () => {
     }
   );
 
-  // const editTaskMutation = (id, updatedTask) => {
-  //   console.log(updatedTask);
-  //   taskService.updateTask(id, updatedTask);
-  // };
-
   const editTaskMutation = useMutation(
-    (id, updatedTask) => taskService.updateTask(id, updatedTask),
+    ({ id, task }) => taskService.updateTask(id, { ...task }),
     {
       onSuccess: () => queryClient.invalidateQueries('getAllTasks'),
     }
@@ -59,14 +54,18 @@ const Home = () => {
     (newTask) => taskService.createTask(newTask),
     {
       onSuccess: () => queryClient.invalidateQueries('getAllTasks'),
+    },
+    {
+      onError: (error) => console.error(error),
     }
   );
 
-  const handleEditTask = async (taskId, updatedTask) => {
-    console.log(taskId, updatedTask);
-    await editTaskMutation(taskId, updatedTask);
-    //await editTaskMutation.mutateAsync(taskId, updatedTask);
+  const handleEditTask = async (id, task) => {
+    await editTaskMutation.mutateAsync({ id, task });
+    setIsEditing(false);
+    setIsOpen(false);
   };
+
   const handleCreateTask = async (newTask) => {
     await createTaskMutation.mutateAsync(newTask);
   };
