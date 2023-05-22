@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/auth.service';
 import { SearchBar } from '../SearchBar';
 
-const NavBar = () => {
+const NavBar = ({ handleSearch }) => {
   const userValue = authService.userValue;
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ const NavBar = () => {
           <span className='text-purple-800 font-bold text-lg'>TASKER</span>
         </div>
         <div>
-          <SearchBar />
+          <SearchBar handleSearch={handleSearch} />
         </div>
         <div className='flex flex-col items-center'>
           <button

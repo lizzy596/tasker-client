@@ -16,11 +16,24 @@ const Home = () => {
   const [taskToEdit, setTaskToEdit] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const { isLoading } = useQuery('getAllTasks', async () => {
     const { data } = await taskService.getAllTasks();
     setTasks(data);
   });
+
+  const handleSearch = async (input) => {
+    //setIsSearching(true);
+    setSearchTerm('');
+    setSearchTerm(input);
+    console.log(input);
+    await taskService.queryTasks(input);
+    //console.log(data);
+
+    //setTasks(data);
+  };
 
   const handleOpenModal = () => {
     setIsOpen(!isOpen);
@@ -82,7 +95,7 @@ const Home = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBar handleSearch={handleSearch} />
       <div className='absolute left-1 top-30'>
         <Modal
           openModal={handleOpenModal}

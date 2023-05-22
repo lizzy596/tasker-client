@@ -7,14 +7,16 @@ export const taskService = {
   createTask,
   getAllTasks,
   deleteTask,
-  updateTask
+  updateTask,
+  queryTasks
 
 }
 
 
 export function queryTasks(params) {
   const query = queryString.stringify(params);
-  return http.get(`/task?${query}`)
+
+  return http.get(`/task?${params}`)
 };
 
 export function createTask(params) {
