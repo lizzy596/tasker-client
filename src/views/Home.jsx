@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavBar } from '../components/NavBar';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import CreateTask from '../components/Tasks/CreateTask';
@@ -6,18 +6,18 @@ import Modal from '../components/Tasks/Modal';
 import Tasks from '../components/Tasks/Tasks';
 import { useUserAuth } from '../services/auth.service';
 import { taskService } from '../services/task.service';
+import useTableData from '../hooks/useTableData';
 
 const Home = () => {
   const userValue = useUserAuth();
   const queryClient = useQueryClient();
-
   const [tasks, setTasks] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  // const [searchTerm, setSearchTerm] = useState('');
 
   const { isLoading } = useQuery('getAllTasks', async () => {
     const { data } = await taskService.getAllTasks();
@@ -25,14 +25,13 @@ const Home = () => {
   });
 
   const handleSearch = async (input) => {
-    //setIsSearching(true);
-    setSearchTerm('');
-    setSearchTerm(input);
-    console.log(input);
-    await taskService.queryTasks(input);
-    //console.log(data);
-
-    //setTasks(data);
+    setIsSearching(true);
+    //setSearchTerm('');
+    //setSearchTerm(input);
+   
+    const { data }  = await taskService.queryTasks({search:input});
+    console.log(data);
+  setTasks(data);
   };
 
   const handleOpenModal = () => {
@@ -93,6 +92,16 @@ const Home = () => {
     await markCompleteMutation.mutateAsync({ id, task });
   };
 
+
+
+
+// useEffect(() => {
+//   if(isSearching) {
+
+//   }
+
+// }, [isSearching]);
+
   return (
     <>
       <NavBar handleSearch={handleSearch} />
@@ -131,7 +140,7 @@ const Home = () => {
               />
             </div>
           ) : (
-            <h2>To Get Started, create a task!!</h2>
+           <h2>To get started create a task!</h2>
           )}
         </div>
       </div>

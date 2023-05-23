@@ -15,8 +15,8 @@ export const taskService = {
 
 export function queryTasks(params) {
   const query = queryString.stringify(params);
-
-  return http.get(`/task?${params}`)
+  console.log(query)
+  return http.get(`/task?${query}`)
 };
 
 export function createTask(params) {
