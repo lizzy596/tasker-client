@@ -6,7 +6,6 @@ import Modal from '../components/Tasks/Modal';
 import Tasks from '../components/Tasks/Tasks';
 import { useUserAuth } from '../services/auth.service';
 import { taskService } from '../services/task.service';
-import useTableData from '../hooks/useTableData';
 
 const Home = () => {
   const userValue = useUserAuth();
@@ -17,21 +16,25 @@ const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  // const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const { isLoading } = useQuery('getAllTasks', async () => {
-    const { data } = await taskService.getAllTasks();
-    setTasks(data);
+  const { isLoading } = useQuery(['getAllTasks', searchTerm], async () => {
+    if (!isSearching) {
+      const { data } = await taskService.getAllTasks();
+      setTasks(data);
+    } else {
+      const { data } = await taskService.queryTasks({
+        // userId: userValue.id,
+        search: searchTerm,
+      });
+      setTasks(data.results);
+    }
   });
 
   const handleSearch = async (input) => {
     setIsSearching(true);
-    //setSearchTerm('');
-    //setSearchTerm(input);
-   
-    const { data }  = await taskService.queryTasks({search:input});
-    console.log(data);
-  setTasks(data);
+    setSearchTerm(input);
+    await searchPageMutation.mutateAsync(input);
   };
 
   const handleOpenModal = () => {
@@ -47,6 +50,10 @@ const Home = () => {
     setTaskToEdit({ ...taskBody });
     setIsOpen(true);
   };
+
+  const searchPageMutation = useMutation((input) => setSearchTerm(input), {
+    onSuccess: () => queryClient.invalidateQueries('getAllTasks'),
+  });
 
   const markCompleteMutation = useMutation(
     ({ id, task }) =>
@@ -92,16 +99,6 @@ const Home = () => {
     await markCompleteMutation.mutateAsync({ id, task });
   };
 
-
-
-
-// useEffect(() => {
-//   if(isSearching) {
-
-//   }
-
-// }, [isSearching]);
-
   return (
     <>
       <NavBar handleSearch={handleSearch} />
@@ -140,7 +137,7 @@ const Home = () => {
               />
             </div>
           ) : (
-           <h2>To get started create a task!</h2>
+            <h2>To get started create a task!</h2>
           )}
         </div>
       </div>

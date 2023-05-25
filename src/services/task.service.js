@@ -14,6 +14,8 @@ export const taskService = {
 
 
 export function queryTasks(params) {
+  const accessToken = authService.userValue.token;
+  const http = createAuthCaller(accessToken);
   const query = queryString.stringify(params);
   console.log(query)
   return http.get(`/task?${query}`)
