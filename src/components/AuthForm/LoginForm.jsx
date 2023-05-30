@@ -40,6 +40,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors(null);
     setErrors(validateForm(loginValidation, loginMessages, formData));
     if (Object.keys(errors).length > 0) {
       return;

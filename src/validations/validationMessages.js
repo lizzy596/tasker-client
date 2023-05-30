@@ -12,3 +12,8 @@ export const loginMessages = {
   "password": "Enter Password",
  
 }
+
+
+export const createTaskMessages = {
+  "title": "Title is required"
+}

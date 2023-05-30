@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
+import { createTaskMessages } from '../../validations/validationMessages';
+import { createTaskValidation } from '../../validations/task.validation';
+import { validateForm } from '../../utils/validate';
+import FormError from '../AuthForm/FormError';
+
 import 'react-datepicker/dist/react-datepicker.css';
 import { useUserAuth } from '../../services/auth.service';
 import TaskMessage from './TaskMessage';
@@ -10,9 +15,11 @@ const CreateTask = ({
   isEditing,
   onEdit,
   setEditTask,
+  handleCloseModal,
 }) => {
   const userValue = useUserAuth();
   const [showTaskMessage, setShowTaskMessage] = useState(false);
+  const [errors, setErrors] = useState({});
   const [dueDate, setDueDate] = useState(new Date());
 
   const [formData, setFormData] = useState({
@@ -36,7 +43,10 @@ const CreateTask = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (isEditing) {
+    setErrors(validateForm(createTaskValidation, createTaskMessages, formData));
+    if (Object.keys(errors).length > 0) {
+      return;
+    } else if (isEditing) {
       await onEdit(setEditTask.id, {
         ...formData,
         dueDate,
@@ -47,13 +57,15 @@ const CreateTask = ({
       });
       setDueDate(new Date());
       setShowTaskMessage(true);
-    } else {
+    } else if (!isEditing) {
       await onCreate({ ...formData, dueDate, userId: userValue.id });
       setFormData({
         title: '',
       });
       setDueDate(new Date());
       setShowTaskMessage(true);
+    } else {
+      console.log('nothing to see here');
     }
   };
 
@@ -97,6 +109,7 @@ const CreateTask = ({
             onChange={handleInputChange}
             className='shadow appearance-none border rounded w-full py-2 px-3 text-white-700 leading-tight focus:outline-none focus:shadow-outline'
           />
+          {errors?.title && <FormError text={errors.title} />}
         </div>
         <div className='mb-4'>
           <label

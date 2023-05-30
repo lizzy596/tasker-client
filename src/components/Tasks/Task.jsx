@@ -3,7 +3,8 @@ import 'dayjs/locale/en';
 
 const Task = ({ task, onComplete, onDelete, onEdit, isComplete }) => {
   const currentDate = new Date();
-  const today = currentDate.toISOString();
+ currentDate.setDate(currentDate.getDate() - 1); // Add one day to the current date
+  const yesterday = currentDate.toISOString();
   const formattedDate = dayjs(task.dueDate).format('D MMMM, YYYY');
 
   return (
@@ -18,7 +19,7 @@ const Task = ({ task, onComplete, onDelete, onEdit, isComplete }) => {
           />
 
           <div
-            className={task.dueDate < today ? 'text-red-800' : 'text-black-800'}
+            className={task.dueDate < yesterday  ? 'text-red-800' : 'text-black-800'}
           >
             <h1 className='font-bold font-lg'>{task.title}</h1>
             <div className='text-500'>{formattedDate}</div>

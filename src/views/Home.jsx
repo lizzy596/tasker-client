@@ -39,6 +39,14 @@ const Home = () => {
 
   const handleOpenModal = () => {
     setIsOpen(!isOpen);
+    if (isEditing) {
+      setIsEditing(!isEditing);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(!isOpen);
+    setIsEditing(!isEditing);
   };
 
   const deleteTaskMutation = useMutation((id) => taskService.deleteTask(id), {
@@ -114,6 +122,7 @@ const Home = () => {
               openModal={handleOpenModal}
               onCreate={handleCreateTask}
               onEdit={handleEditTask}
+              closeModal={handleCloseModal}
             />
           }
         />

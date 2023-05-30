@@ -38,12 +38,13 @@ const RegistrationForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('been clicked')
+    console.log(errors)
     setErrors(validateForm(registerValidation, registerMessages, formData));
-    if (Object.keys(errors)) {
+    if (Object.keys(errors).length > 0) {
       return;
     } else {
       delete formData['confirmPassword'];
-
       handleRegisterUser(formData);
       navigate('/login');
     }
@@ -70,7 +71,7 @@ const RegistrationForm = () => {
           value={formData.firstName}
           onChange={handleInputChange}
         />
-        {errors.firstName && <FormError text={errors.firstName} />}
+        {errors?.firstName && <FormError text={errors.firstName} />}
       </div>
       <div className='mb-4'>
         <label
@@ -88,7 +89,7 @@ const RegistrationForm = () => {
           value={formData.lastName}
           onChange={handleInputChange}
         />
-        {errors.lastName && <FormError text={errors.lastName} />}
+        {errors?.lastName && <FormError text={errors.lastName} />}
       </div>
       <div className='mb-4'>
         <label className='block text-gray-700 font-bold mb-2' htmlFor='email'>
@@ -103,7 +104,7 @@ const RegistrationForm = () => {
           value={formData.email}
           onChange={handleInputChange}
         />
-        {errors.email && <FormError text={errors.email} />}
+        {errors?.email && <FormError text={errors.email} />}
       </div>
       <div className='mb-6'>
         <label
@@ -120,7 +121,7 @@ const RegistrationForm = () => {
           value={formData.password}
           onChange={handleInputChange}
         />
-        {errors.password && <FormError text={errors.password} />}
+        {errors?.password && <FormError text={errors.password} />}
       </div>
       <div className='mb-6'>
         <label
@@ -137,7 +138,7 @@ const RegistrationForm = () => {
           value={formData.confirmPassword}
           onChange={handleInputChange}
         />
-        {errors.confirmPassword && <FormError text={errors.confirmPassword} />}
+        {errors?.confirmPassword && <FormError text={errors.confirmPassword} />}
       </div>
       <div className='flex items-center justify-between'>
         <button

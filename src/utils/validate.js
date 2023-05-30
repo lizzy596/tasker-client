@@ -11,6 +11,7 @@ export const validateForm = (schema, validationMessages, formInputs, formErrors 
 
   } else {
     // Submit form data to server
-    console.log('no errors');
+    let noErrors = {};
+    return noErrors
   }
 };
