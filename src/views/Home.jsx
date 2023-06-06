@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { NavBar } from '../components/NavBar';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import CreateTask from '../components/Tasks/CreateTask';
